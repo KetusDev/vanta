@@ -2,10 +2,11 @@ import { useDiskMetrics } from "../hooks/useMetrics";
 import { clampPercent, formatGigabytes } from "../lib/format";
 import { MetricCard } from "./ui/MetricCard";
 import { ProgressBar } from "./ui/ProgressBar";
+import { Sparkline } from "./ui/Sparkline";
 import { StatRow } from "./ui/StatRow";
 
 export function DiskCard() {
-  const disk = useDiskMetrics();
+  const { data: disk, history, loading } = useDiskMetrics();
 
   return (
     <MetricCard
@@ -13,7 +14,7 @@ export function DiskCard() {
       subtitle="Mounted volumes"
       accent="disk"
       delay={240}
-      loading={!disk}
+      loading={loading && !disk}
     >
       {!disk ? (
         <div className="metric-skeleton" />
@@ -23,7 +24,7 @@ export function DiskCard() {
             <span className="metric-hero__value">{formatGigabytes(disk.used_gb, 0)}</span>
             <span className="metric-hero__unit">used across drives</span>
           </div>
-
+          <Sparkline values={history} tone="disk" label="Combined utilization" />
           <div className="disk-list">
             {disk.disks.map((entry) => {
               const usage = clampPercent((entry.used_gb / entry.total_gb) * 100);
@@ -40,7 +41,6 @@ export function DiskCard() {
               );
             })}
           </div>
-
           <StatRow
             label="Combined total"
             value={formatGigabytes(disk.total_gb)}

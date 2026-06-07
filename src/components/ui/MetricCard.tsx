@@ -6,6 +6,7 @@ type MetricCardProps = {
   accent: "cpu" | "ram" | "disk" | "network";
   delay?: number;
   loading?: boolean;
+  wide?: boolean;
   children: ReactNode;
 };
 
@@ -22,11 +23,12 @@ export function MetricCard({
   accent,
   delay = 0,
   loading = false,
+  wide = false,
   children,
 }: MetricCardProps) {
   return (
     <article
-      className={`metric-card ${accentStyles[accent]}`}
+      className={`metric-card ${accentStyles[accent]}${wide ? " metric-card--wide" : ""}`}
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="metric-card__glow" aria-hidden="true" />

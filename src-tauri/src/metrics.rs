@@ -28,7 +28,31 @@ pub struct DiskMetrics {
 }
 
 #[derive(Serialize)]
+pub struct NetworkInterface {
+    pub name: String,
+    pub download_kbps: u64,
+    pub upload_kbps: u64,
+}
+
+#[derive(Serialize)]
 pub struct NetworkMetrics {
     pub download_kbps: u64,
     pub upload_kbps: u64,
+    pub interfaces: Vec<NetworkInterface>,
+}
+
+#[derive(Serialize)]
+pub struct SystemMetrics {
+    pub uptime_secs: u64,
+    pub swap_total_mb: u64,
+    pub swap_used_mb: u64,
+}
+
+#[derive(Serialize)]
+pub struct AllMetrics {
+    pub cpu: CpuMetrics,
+    pub ram: RamMetrics,
+    pub disk: DiskMetrics,
+    pub network: NetworkMetrics,
+    pub system: SystemMetrics,
 }

@@ -14,9 +14,9 @@
       {
         "title": "Vanta",
         "width": 960,
-        "height": 720,
+        "height": 780,
         "minWidth": 720,
-        "minHeight": 600
+        "minHeight": 640
       }
     ],
     "security": {

@@ -1,3 +1,5 @@
+import type { SpeedUnit } from "../types/metrics";
+
 export function formatPercent(value: number, digits = 1): string {
   return `${value.toFixed(digits)}%`;
 }
@@ -13,7 +15,15 @@ export function formatGigabytes(gb: number, digits = 1): string {
   return `${gb.toFixed(digits)} GB`;
 }
 
-export function formatSpeed(kbps: number): string {
+export function formatSpeed(kbps: number, unit: SpeedUnit = "kbps"): string {
+  if (unit === "mbps") {
+    const mbps = (kbps * 8) / 1000;
+    if (mbps >= 1) {
+      return `${mbps.toFixed(1)} Mbps`;
+    }
+    return `${(mbps * 1000).toFixed(0)} Kbps`;
+  }
+
   if (kbps >= 1024) {
     return `${(kbps / 1024).toFixed(1)} MB/s`;
   }
@@ -25,4 +35,25 @@ export function formatSpeed(kbps: number): string {
 
 export function clampPercent(value: number): number {
   return Math.min(100, Math.max(0, value));
+}
+
+export function formatUptime(seconds: number): string {
+  const days = Math.floor(seconds / 86_400);
+  const hours = Math.floor((seconds % 86_400) / 3_600);
+  const minutes = Math.floor((seconds % 3_600) / 60);
+
+  if (days > 0) {
+    return `${days}d ${hours}h ${minutes}m`;
+  }
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`;
+  }
+  return `${minutes}m`;
+}
+
+export function truncateName(name: string, max = 28): string {
+  if (name.length <= max) {
+    return name;
+  }
+  return `${name.slice(0, max - 1)}…`;
 }
