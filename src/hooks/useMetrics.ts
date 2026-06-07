@@ -1,0 +1,31 @@
+import { invoke } from "@tauri-apps/api/core";
+import { useEffect, useState } from "react";
+import { CpuMetrics, RamMetrics} from "../types/metrics";
+
+export function useCpuMetrics(){
+    const [data, setData] = useState<CpuMetrics | null>(null);
+
+    useEffect(()=>{
+        const interval = setInterval(async ()=>{
+            const metrics = await invoke<CpuMetrics>("get_cpu");
+            setData(metrics);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    return data;
+}
+
+export function useRamMetrics(){
+    const [data, setData] = useState<RamMetrics | null>(null);
+
+    useEffect(()=>{
+        const interval = setInterval(async()=>{
+            const metrics = await invoke<RamMetrics>("get_ram");
+            setData(metrics);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    return data;
+}
